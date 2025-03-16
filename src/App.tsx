@@ -4,6 +4,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Navbar from "./components/Navbar";
 import Products from "./components/ProductCard";
+import ProductByCategory from "./components/categoryProducsCart";
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const App: React.FC = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/products" element={<Products />} />
-
+        <Route path="/products/:categoryId" element={<ProductByCategory />} />
 
       </Routes>
     </Router>

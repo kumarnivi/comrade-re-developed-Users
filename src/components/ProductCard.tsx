@@ -14,7 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { getProducts, getCategories } from "../api"; // Import API functions
 import { Product } from "../types";
-import "../styles/Products.css"; // Import loader styles
+import "../styles/loader.css"; // Import loader styles
 import Heading from "./heading";
 
 const Products = () => {
