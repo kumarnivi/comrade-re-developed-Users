@@ -3,6 +3,7 @@
 .heading {
     margin: auto;
     text-align: center;
+    margin-bottom: 30px;
     /* width: 250px; */
 }
 .heading img {

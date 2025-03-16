@@ -1,103 +1,191 @@
-import { useEffect, useState } from "react";
-import { getProducts, getCategories } from "../api";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  IconButton,
+  Modal,
+} from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { getProducts, getCategories } from "../api"; // Import API functions
 import { Product } from "../types";
-import { Card, CardContent, CardMedia, Button, Chip, Typography, Link as MuiLink, Box, Rating } from "@mui/material";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import { Link } from "react-router-dom"; // Import Link for navigation
-import "../styles/Products.css"; // Import your custom loader styles
+import "../styles/Products.css"; // Import loader styles
+import Heading from "./heading";
 
-const Products: React.FC = () => {
+const Products = () => {
+  const [wishlist, setWishlist] = useState<{ [key: number]: boolean }>({});
+  const [openModal, setOpenModal] = useState<number | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Record<number, string>>({});
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>( []);
+   const [headingText, setHeadingText] = useState('Products')
+  
+
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    Promise.all([getProducts(), getCategories()])
-      .then(([productsRes, categoriesRes]) => {
-        setProducts(productsRes.data);
-        const categoryMap = categoriesRes.data.reduce((acc, category) => {
-          acc[category.id] = category.name;
-          return acc;
-        }, {} as Record<number, string>);
-        setCategories(categoryMap);
+    setLoading(true); // Show loader before fetching
+    getProducts()
+      .then((res) => {
+        setProducts(res.data);
+        const initialWishlist: { [key: number]: boolean } = {};
+        res.data.forEach((product: Product) => {
+          initialWishlist[product.id] = false;
+        });
+        setWishlist(initialWishlist);
       })
-      .catch((error) => console.error("Error fetching data:", error))
-      .finally(() => setLoading(false));
+      .catch((error) => console.error("Error fetching products:", error))
+      .finally(() => setLoading(false)); // Hide loader after fetching
+
+    getCategories()
+      .then((res) => setCategories(res.data))
+      .catch((error) => console.error("Error fetching categories:", error));
   }, []);
 
-  const getAverageRating = (reviews: { rating: number }[]) => {
-    if (!reviews || reviews.length === 0) return 0;
-    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
-    return total / reviews.length;
+  const getCategoryName = (categoryId: number) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
+
+  const handleWishlist = (productId: number) => {
+    setWishlist((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
   };
 
   return (
-    <div>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Products</h2>
 
+    <>
+  
+
+      <Box sx={{ flexGrow: 1, padding: 2, marginTop: "100px" }}>
+      <Heading  text={headingText} width="300px" />
       {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <div className="loader"></div> {/* Custom Loader */}
+        <Box className="loader-container">
+          <div className="loader"></div>
         </Box>
       ) : (
+        <Grid container spacing={3} justifyContent="center">
+          {products.map((product) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+              <Card
+                sx={{
+                  position: "relative",
+                  overflow: "hidden",
+                  transition: "all 0.3s ease-in-out",
+                  "&:hover": { transform: "scale(1.03)" },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="250"
+                  width="100%"
+                  image={product.images[0]}
+                  alt={product.name}
+                  onError={(e: any) =>
+                    (e.target.src =
+                      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7")
+                  }
+                />
+                <IconButton
+                  sx={{
+                    position: "absolute",
+                    top: 10,
+                    left: 10,
+                    backgroundColor: "rgba(255,255,255,0.9)",
+                    "&:hover": { backgroundColor: "rgba(255,255,255,1)" },
+                  }}
+                  onClick={() => handleWishlist(product.id)}
+                >
+                  {wishlist[product.id] ? (
+                    <FavoriteIcon color="error" />
+                  ) : (
+                    <FavoriteBorderIcon />
+                  )}
+                </IconButton>
+
+                <CardContent>
+                  <Typography gutterBottom variant="h6" component="div">
+                    {product.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {getCategoryName(product.categoryId)}
+                  </Typography>
+                  <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
+                    LKR {product.price}
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={() => setOpenModal(product.id)}
+                    >
+                      Quick View
+                    </Button>
+                    <Button variant="outlined" fullWidth>
+                      Add to Cart
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* Quick View Modal */}
+      <Modal
+        open={openModal !== null}
+        onClose={() => setOpenModal(null)}
+        aria-labelledby="product-modal"
+        aria-describedby="product-description"
+      >
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: 2,
-            justifyContent: "space-between",
-            alignItems:"center"
-           
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            maxWidth: 600,
+            maxHeight: "90vh",
+            overflow: "auto",
+            borderRadius: 2,
           }}
         >
-          {products.map((product) => (
-            <Card key={product.id} sx={{ width: 320, maxWidth: "100%", boxShadow: 3, borderRadius: 2, }}>
+          {openModal !== null && (
+            <>
+              <Typography variant="h5" component="h2" gutterBottom>
+                {products.find((p) => p.id === openModal)?.name}
+              </Typography>
               <CardMedia
                 component="img"
-                height="190"
-                image={product.images?.[0] || "/placeholder.jpg"}
-                alt={product.name}
-                sx={{ objectFit: "cover", borderRadius: "8px 8px 0 0" }}
+                height="300"
+                image={products.find((p) => p.id === openModal)?.images[0]}
+                alt={products.find((p) => p.id === openModal)?.name}
+                sx={{ borderRadius: 1, mb: 2 }}
               />
-              <CardContent>
-                <Typography variant="caption" color="textSecondary">
-                  {categories[product.categoryId] || "Unknown Category"}
-                </Typography>
-                <MuiLink
-                  href="#"
-                  color="inherit"
-                  underline="hover"
-                  sx={{ display: "flex", alignItems: "center", fontWeight: 600, fontSize: "1.1rem" }}
-                >
-                  {product.name} <ArrowOutwardIcon sx={{ ml: 0.5, fontSize: "1rem" }} />
-                </MuiLink>
-
-                <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                  <Rating value={getAverageRating(product.reviews)} precision={0.5} readOnly size="small" />
-                  <Typography variant="body2" sx={{ ml: 1 }}>
-                    ({product.reviews?.length || 0})
-                  </Typography>
-                </Box>
-
-                <Typography variant="h6" sx={{ mt: 1, fontWeight: "bold", display: "flex", alignItems: "center" }}>
-                  ${product.price}
-                  {product.reviews?.length > 3 && (
-                    <Chip label="Best Seller" color="success" size="small" sx={{ ml: 1 }} />
-                  )}
-                </Typography>
-              </CardContent>
-              <Box sx={{ textAlign: "center", pb: 2, px: 2 }}>
-                <Link to={`/product/${product.id}`} style={{ textDecoration: "none" }}>
-                  <Button variant="contained" color="primary" size="large" fullWidth>
-                    View Product
-                  </Button>
-                </Link>
-              </Box>
-            </Card>
-          ))}
+              <Typography variant="body1" paragraph>
+                {products.find((p) => p.id === openModal)?.description}
+              </Typography>
+              <Button variant="contained" onClick={() => setOpenModal(null)}>
+                Close
+              </Button>
+            </>
+          )}
         </Box>
-      )}
-    </div>
+      </Modal>
+    </Box>
+    </>
+
+  
   );
 };
 

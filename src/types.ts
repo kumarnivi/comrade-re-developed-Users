@@ -1,14 +1,15 @@
 export interface Product {
-    reviews: any;
-    categoryId: any;
-    // stock: string;
-    // category: string;
-    id: number;
-    name: string;
-    price: number;
-    images: string[];
-    // stock: number;
-  }
+  categoryId: number;
+  id: number;
+  name: string;
+  category: { id: number; name: string; description: string; image: string };
+  price: number;
+  description: string;
+  images: string[];
+  stock: number;
+  reviews: { id: number; productId: number; rating: number; comment: string }[];
+}
+
   
   export interface CartItem {
     id: number;
