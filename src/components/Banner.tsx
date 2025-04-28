@@ -16,6 +16,7 @@ import carusel07 from "../assets/carusel-img07.png";
 import carusel08 from "../assets/carusel-img08.png";
 import carusel09 from "../assets/carusel-img09.png";
 import Heading from "./heading";
+import { Link } from "react-router-dom";
 
 const Banner: React.FC = () => {
   // const [headingText, setHeadingText] = useState('Category of Comrade')
@@ -68,7 +69,7 @@ const Banner: React.FC = () => {
                 </h2>
                 <p>Get Free Shipping on all orders under $10.00</p>
             
-                <Button variant="contained" style={{background:"#007074"}}> <a href="/products" style={{color:"#ffff", textDecoration:"none"}}>Shop Now</a></Button>         
+                <Button variant="contained" style={{background:"#007074"}}> <Link to="/products" style={{color:"#ffff", textDecoration:"none"}}>Shop Now</Link></Button>         
             </div>
            
 
