@@ -1,3 +1,7 @@
+
+// Product Page
+
+
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -16,6 +20,7 @@ import { getProducts, getCategories } from "../api"; // Import API functions
 import { Product } from "../types";
 import "../styles/loader.css"; // Import loader styles
 import Heading from "./heading";
+import { Link } from "react-router-dom";
 
 const Products = () => {
   const [wishlist, setWishlist] = useState<{ [key: number]: boolean }>({});
@@ -128,7 +133,8 @@ const Products = () => {
                       Quick View
                     </Button>
                     <Button variant="outlined" fullWidth>
-                      Add to Cart
+                      <Link to='cart'>Add to Cart</Link>
+                      
                     </Button>
                   </Box>
                 </CardContent>

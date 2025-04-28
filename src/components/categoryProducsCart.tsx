@@ -1,3 +1,8 @@
+
+
+
+// Select Product Throw the category
+
 import  { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -32,7 +37,7 @@ const ProductByCategory = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/products/${categoryId}`)
+      .get(`https://comrade-re-developed-api.onrender.com/products/${categoryId}`)
       .then((response) => {
         setProducts(response.data);
         const initialWishlist: { [key: number]: boolean } = {};
@@ -118,6 +123,7 @@ const ProductByCategory = () => {
                       Add to Cart
                     </Button>
                   </Box>
+
                 </CardContent>
               </Card>
             </Grid>
