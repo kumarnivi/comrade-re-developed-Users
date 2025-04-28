@@ -37,7 +37,7 @@ const Navbar = () => {
   //   setAnchorEl(null);
   //   handleMobileMenuClose();
   // };
-
+// main part of  handle mobile menu
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
