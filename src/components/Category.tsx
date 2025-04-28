@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   Box, Card, CardContent, CardMedia, Typography, Button, 
-  Modal, IconButton, Tooltip, Skeleton, styled, CircularProgress 
+  Modal, IconButton, Tooltip, Skeleton, styled 
 } from "@mui/material";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
@@ -65,7 +65,7 @@ const Category = () => {
       });
   }, []);
 
-  const handleImageError = (id: number, e: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleImageError = (_id: number, e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "https://via.placeholder.com/345"; 
   };
 

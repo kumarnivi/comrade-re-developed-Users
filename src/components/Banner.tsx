@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
+// import { styled } from "@mui/material/styles";
+// import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import "../styles/Banner.css";
@@ -18,7 +18,8 @@ import carusel09 from "../assets/carusel-img09.png";
 import Heading from "./heading";
 
 const Banner: React.FC = () => {
-  const [headingText, setHeadingText] = useState('Category of Comrade')
+  // const [headingText, setHeadingText] = useState('Category of Comrade')
+  const [headingText] = useState('Category of Comrade')
 
 
   // Use media queries:
@@ -31,14 +32,14 @@ const Banner: React.FC = () => {
   const translateZValue = 300;
 
   // Styled Paper component with transparent background
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    boxShadow: "none",
-    backgroundColor: "transparent",
-  }));
+  // const Item = styled(Paper)(({ theme }) => ({
+  //   ...theme.typography.body2,
+  //   padding: theme.spacing(1),
+  //   textAlign: "center",
+  //   color: theme.palette.text.secondary,
+  //   boxShadow: "none",
+  //   backgroundColor: "transparent",
+  // }));
 
   // Array of images for the carousel
   const images = [

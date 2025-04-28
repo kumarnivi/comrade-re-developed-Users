@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -22,7 +22,7 @@ const Products = () => {
   const [openModal, setOpenModal] = useState<number | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<{ id: number; name: string }[]>( []);
-   const [headingText, setHeadingText] = useState('Products')
+   const [headingText] = useState('Products')
   
 
   const [loading, setLoading] = useState(true); // Add loading state
