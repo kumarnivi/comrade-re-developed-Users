@@ -54,7 +54,7 @@ const Category = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://comrade-re-developed-api.onrender.com/categories-with-product-count")
+    axios.get("https://comrade-re-developed-api.onrender.com/categories/categories-with-product-count")
       .then((response) => {
         setCategories(response.data);
         setLoading(false);
