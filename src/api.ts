@@ -3,7 +3,8 @@ import { Product, CartItem, CheckoutSession } from "./types";
 
 
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+// const API = axios.create({ baseURL: "http://localhost:5000" });
+const API = axios.create({baseURL:"https://comrade-re-developed-api.onrender.com"})
 
 export const getProducts = () => API.get<Product[]>("/products");
 
